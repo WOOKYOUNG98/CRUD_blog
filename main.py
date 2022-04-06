@@ -3,7 +3,7 @@ import csv
 from post import Post
 
 # 파일 경로
-file_path = "./myvenv/blog_project/data.csv"
+file_path = "./data.csv"
 
 # post 객체를 저장할 리스트
 post_list = []
@@ -33,6 +33,63 @@ def write_post():
     post = Post(id, title, content, 0)
     post_list.append(post)
     print("# 게시글이 등록되었습니다.")
+
+# 게시글 목록
+def list_post():
+    print("\n\n- 게시글 목록 -")
+    id_list = []
+    for post in post_list:
+        print("번호 : ", post.get_id())
+        print("제목 : ", post.get_title())
+        print("조회수 : ", post.get_view_count())
+        print("")
+        id_list.append(post.get_id())
+
+    while True:
+        print("Q) 글 번호를 선택해 주세요 (메뉴로 돌아가려면 -1을 입력해주세요)")
+        try:
+            id = int(input(">>>"))
+            if id in id_list:
+                detail_post(id)
+                break
+            elif id == -1:
+                break
+            else:
+                print("없는 글 번호 입니다.")
+        except ValueError:
+            print("숫자를 입력해주세요")
+
+# 글 상세 페이지
+def detail_post(id):
+    print("\n\n- 게시글 상세 -")
+
+    for post in post_list:
+        if post.get_id() == id:
+            # 조회수 1 증가
+            post.add_view_count()
+            print("번호 :", post.get_id())    
+            print("제목 :", post.get_title())    
+            print("본문 :", post.get_content())    
+            print("조회수 :", post.get_view_count()) 
+            target_post = post
+
+    while True:
+        print("Q) 수정 : 1 삭제 : 2 (메뉴를 돌아가려면 -1을 입력)")
+        try:
+            choice = int(input(">>>"))
+            if choice == 1:
+                update_post(target_post)
+                break
+            elif choice == 2:
+                print("삭제")
+                delete_post(target_post)
+            elif choice == -1:
+                break 
+            else:
+                print("잘못 입력하였습니다.")
+        except ValueError:
+            print("숫자를 입력해 주세요")  
+
 
 
 # 메뉴 출력하기
